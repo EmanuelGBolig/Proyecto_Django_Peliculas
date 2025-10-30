@@ -6,7 +6,7 @@ Este proyecto es un catálogo web de películas que permite listar todas las pel
 
 ### Autor
 
-* [Emanuel Gomez Bolig]
+* Emanuel Gomez Bolig
 
 ---
 
@@ -16,8 +16,8 @@ Para levantar este proyecto en un entorno local, sigue estos pasos:
 
 1.  **Clonar el repositorio:**
     ```bash
-    git clone [LA-URL-DE-TU-REPOSITORIO]
-    cd [NOMBRE-DE-LA-CARPETA-DEL-PROYECTO]
+    git clone https://github.com/EmanuelGBolig/Proyecto_Django_Peliculas.git
+    cd PROYECTO_FINAL
     ```
 
 2.  **Crear y activar un entorno virtual:**
