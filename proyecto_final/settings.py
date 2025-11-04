@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +22,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-mxyto(q_--@zrx_bq_6t%!u2p=deqc=r)zw6pn8k-si*k6c64r'
+# Lee la SECRET_KEY desde las variables de entorno
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG estará en 'True' solo si la variable de entorno DEBUG es 'True'
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -38,12 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'whitenoise.runserver_nostatic',
-
     'catalogo',
-
     # Apps de terceros
-    'cloudinary_storage',           
-    'cloudinary',                    
+    'cloudinary_storage',
+    'cloudinary',
 ]
 
 MIDDLEWARE = [
@@ -81,10 +82,11 @@ WSGI_APPLICATION = 'proyecto_final.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        # Usa la variable DATABASE_URL de Render
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600,
+    )
 }
 
 
@@ -136,10 +138,11 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 
 # --- Configuración de Cloudinary (Media Files) ---
+# --- Configuración de Cloudinary (Media Files) ---
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'dpynpe2sw',
-    'API_KEY': '245482829294299',
-    'API_SECRET': 'm5b99v3fgPAtF-crkzrtw4SCYkg',
+    'CLOUD_NAME': os.environ.get('CLOUD_NAME'),
+    'API_KEY': os.environ.get('API_KEY'),
+    'API_SECRET': os.environ.get('API_SECRET'),
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
