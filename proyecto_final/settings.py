@@ -1,55 +1,44 @@
 import os
 from pathlib import Path
 import dj_database_url
-from dotenv import load_dotenv  # Para leer el .env
+from dotenv import load_dotenv
+import cloudinary  # <-- Importante para el método antiguo
 
-
-
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Definir BASE_DIR primero
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Carga el archivo .env (solo para desarrollo local)
 load_dotenv(BASE_DIR / '.env')
 
 # --- Seguridad ---
-# Lee la SECRET_KEY desde el entorno (Render o .env)
 SECRET_KEY = os.getenv("SECRET_KEY", "clave-secreta-local-insegura")
-
-# DEBUG estará en 'True' solo si la variable DEBUG es 'True'
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-# Hosts permitidos
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
-
-# Añade el host de Render automáticamente si existe
 RENDER_EXTERNAL_HOSTNAME = os.getenv("RENDER_EXTERNAL_HOSTNAME")
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
-    ALLOWED_HOSTS.append('.onrender.com') # Añade el wildcard por si acaso
+    ALLOWED_HOSTS.append('.onrender.com')
 
 
 # --- Aplicaciones ---
-# El orden es importante para Cloudinary y el Admin
 INSTALLED_APPS = [
-    'whitenoise.runserver_nostatic',  # Para que Whitenoise sirva CSS en local
-    'cloudinary_storage',             # Debe ir ANTES del admin
-    'cloudinary',                     # Debe ir ANTES del admin
-    
+    # El orden aquí importa para la v0.3.0
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',  # Para el CSS del admin
     'django.contrib.staticfiles',
-
-    # Tu app
-    'catalogo',
+    'catalogo',  # Tu app
+    'cloudinary_storage',  # La app de storage
+    'cloudinary',  # La app principal de cloudinary
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', # Middleware de Whitenoise
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Middleware de Whitenoise
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -63,7 +52,7 @@ ROOT_URLCONF = 'proyecto_final.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'], # Carpeta global de templates
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -78,10 +67,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'proyecto_final.wsgi.application'
 
-
 # --- Base de Datos ---
-# Usa PostgreSQL en Render (leyendo DATABASE_URL)
-# Usa db.sqlite3 en local
 DATABASES = {
     'default': dj_database_url.config(
         default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
@@ -89,42 +75,44 @@ DATABASES = {
     )
 }
 
-
-# --- Validación de Contraseñas ---
+# --- Validación de Contraseñas (no es necesario cambiar) ---
 AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'
+    },
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
     {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-
-# --- Internacionalización ---
-LANGUAGE_CODE = 'es-es' # Español
-TIME_ZONE = 'America/Argentina/Buenos_Aires' # Tu zona horaria
+# --- Internacionalización (no es necesario cambiar) ---
+LANGUAGE_CODE = 'es-es'
+TIME_ZONE = 'America/Argentina/Buenos_Aires'
 USE_I18N = True
 USE_TZ = True
 
 
 # --- Configuración de Archivos Estáticos (CSS/JS) ---
+# ¡Volvemos al storage estándar de Whitenoise!
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles' # Carpeta para 'collectstatic' en Render
-STATICFILES_STORAGE = 'cloudinary_storage.storage.CloudinaryWhiteNoiseStaticFilesStorage'
-
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # --- Configuración de Archivos Multimedia (Imágenes subidas) ---
-MEDIA_URL = '/media/' 
-# (No necesitamos MEDIA_ROOT, Cloudinary lo maneja)
+MEDIA_URL = '/media/'
+# (No necesitamos MEDIA_ROOT)
 
-# Esta es la configuración MODERNA que lee las variables de entorno
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.getenv('CLOUD_NAME'),
-    'API_KEY': os.getenv('API_KEY'),
-    'API_SECRET': os.getenv('API_SECRET'),
-}
+# --- Configuración de Cloudinary (MÉTODO ANTIGUO para v0.3.0) ---
+# ¡Este es el bloque que faltaba!
+cloudinary.config(
+    cloud_name=os.getenv('CLOUD_NAME'),
+    api_key=os.getenv('API_KEY'),
+    api_secret=os.getenv('API_SECRET'),
+)
 
 # Esta línea le dice a Django que use Cloudinary para TODAS las subidas
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# (BORRAMOS CLOUDINARY_STORAGE y STATICFILES_STORAGE de cloudinary)
 
 
 # --- Configuración por defecto ---

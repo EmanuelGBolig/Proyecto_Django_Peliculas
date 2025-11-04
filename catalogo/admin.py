@@ -1,5 +1,5 @@
 from django.contrib import admin
 from .models import Pelicula
 
-# Registra tu modelo (¡y nada más!)
+# Simplemente registra el modelo.
 admin.site.register(Pelicula)
