@@ -5,29 +5,93 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Mi Catálogo de Peliculas</title>
 
+    <script>
+    (function() {
+      const theme = localStorage.getItem('theme');
+      if (theme) {
+        // Si hay un tema guardado, aplícalo al <html>
+        document.documentElement.setAttribute('data-bs-theme', theme);
+      } else {
+        // Si no, usa el modo 'light' por defecto
+        document.documentElement.setAttribute('data-bs-theme', 'light');
+      }
+    })();
+    </script>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container">
-        <a class="navbar-brand" href="{% url 'home' %}">Pagina de Peliculas</a>
-        <div class="collapse navbar-collapse">
-          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'home' %}">Inicio</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'catalogo' %}">Catálogo</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'home' %}">Peliculas</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'home' %}">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'catalogo' %}">Catálogo</a>
+        </li>
+        
+        <li class="nav-item">
+          <a href="#" class="nav-link" id="theme-toggler">
+            <i class="bi" id="theme-icon"></i>
+          </a>
+        </li>
+        </ul>
+    </div>
+  </div>
+</nav>
 
     <div class="container mt-4">{% block content %} {% endblock %}</div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const toggler = document.getElementById('theme-toggler');
+        const icon = document.getElementById('theme-icon');
+        const html = document.documentElement; // La etiqueta <html>
+
+        // Función para actualizar el ícono basado en el tema actual
+        function updateIcon() {
+          const currentTheme = html.getAttribute('data-bs-theme');
+          if (currentTheme === 'dark') {
+            icon.classList.remove('bi-sun-fill');
+            icon.classList.add('bi-moon-stars-fill');
+          } else {
+            icon.classList.remove('bi-moon-stars-fill');
+            icon.classList.add('bi-sun-fill');
+          }
+        }
+
+        // 1. Actualiza el ícono al cargar la página
+        updateIcon();
+
+        // 2. Añade el evento de clic al botón
+        toggler.addEventListener('click', function(e) {
+          e.preventDefault(); // Previene que el enlace '#' navegue
+          
+          // Obtiene el tema actual
+          const currentTheme = html.getAttribute('data-bs-theme');
+          // Decide cuál será el nuevo tema
+          const newTheme = (currentTheme === 'dark') ? 'light' : 'dark';
+
+          // Aplica el nuevo tema al <html>
+          html.setAttribute('data-bs-theme', newTheme);
+          
+          // Guarda la preferencia en localStorage
+          localStorage.setItem('theme', newTheme);
+
+          // Actualiza el ícono
+          updateIcon();
+        });
+      });
+    </script>
+    </body>
+</html>
   </body>
 </html>

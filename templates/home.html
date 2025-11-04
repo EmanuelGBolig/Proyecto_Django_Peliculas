@@ -2,52 +2,60 @@
 
 {% block content %}
 
-  <h1 class="display-5 fw-bold text-center mb-4">Películas Destacadas</h1>
+  <h1 class="display-5 fw-bold text-center mb-4">Destacadas</h1>
 
-  <div id="carruselDestacadas" class="carousel slide" data-bs-ride="carousel">
-    
-    <div class="carousel-indicators">
-      {% for pelicula in peliculas_top %}
-        <button
-          type="button"
-          data-bs-target="#carruselDestacadas"
-          data-bs-slide-to="{{ forloop.counter0 }}"
-          class="{% if forloop.first %}active{% endif %}"
-          aria-current="{% if forloop.first %}true{% endif %}"
-          aria-label="Slide {{ forloop.counter }}"
-        ></button>
-      {% endfor %}
-    </div>
-
-    <div class="carousel-inner" style="height: 600px;"> {% for pelicula in peliculas_top %}
-        <div class="carousel-item {% if forloop.first %}active{% endif %}">
-          
-          <img 
-            src="{{ pelicula.imagen.url }}" 
-            class="d-block w-100" 
-            style="height: 600px; object-fit: cover; object-position: top;" 
-            alt="{{ pelicula.titulo }}"
-          >
-          
-          <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded">
-            <h5>
-              <a href="{% url 'pelicula_detail' pelicula.pk %}" class="text-white text-decoration-none">
-                {{ pelicula.titulo }}
-              </a>
-            </h5>
-          </div>
+  <div class="row">
+    <div class="col-md-10 col-lg-8 mx-auto"> <div id="carruselDestacadas" class="carousel slide" data-bs-ride="carousel">
+        
+        <div class="carousel-indicators">
+          {% for grupo in peliculas_agrupadas %}
+            <button
+              type="button"
+              data-bs-target="#carruselDestacadas"
+              data-bs-slide-to="{{ forloop.counter0 }}"
+              class="{% if forloop.first %}active{% endif %}"
+            ></button>
+          {% endfor %}
         </div>
-      {% endfor %}
-    </div>
 
-    <button class="carousel-control-prev" type="button" data-bs-target="#carruselDestacadas" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carruselDestacadas" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
-  </div>
-
-{% endblock %}
+        <div class="carousel-inner">
+          
+          {% for grupo in peliculas_agrupadas %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+              
+              <div class="row">
+                
+                {% for pelicula in grupo %}
+                  <div class="col-md-4"> <a href="{% url 'pelicula_detail' pelicula.pk %}" class="text-decoration-none text-dark">
+                      <div class="card h-100">
+                        {% if pelicula.imagen %}
+                          <img 
+                            src="{{ pelicula.imagen.url }}" 
+                            class="card-img-top" 
+                            alt="{{ pelicula.titulo }}"
+                            style="height: 300px; object-fit: cover;" >
+                        {% else %}
+                          <img 
+                            src="https://via.placeholder.com/400x600.png?text=Sin+Portada" 
+                            class="card-img-top" 
+                            alt="Sin portada"
+                            style="height: 300px; object-fit: cover;"
+                          >
+                        {% endif %}
+                        <div class="card-body text-center">
+                          <h6 class="card-title">{{ pelicula.titulo }}</h6>
+                        </div>
+                      </div>
+                    </a>
+                    
+                  </div>
+                {% endfor %} </div> </div> {% endfor %} </div> <button class="carousel-control-prev" type="button" data-bs-target="#carruselDestacadas" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carruselDestacadas" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+      </div> </div> {% endblock %}

@@ -7,15 +7,34 @@ from .models import Pelicula
 
 
 class HomePageView(ListView):
-    model = Pelicula  # Le decimos que consulte el modelo Pelicula
-    template_name = "home.html"  # Sigue usando la misma plantilla
-    context_object_name = "peliculas_top"  # Le damos un nombre al contexto
+    model = Pelicula
+    template_name = "home.html"
+    # Cambiamos el nombre del contexto para que sea más claro
+    context_object_name = "peliculas_lista_plana"
 
     def get_queryset(self):
-        # 2. Esta es la consulta clave:
-        # Ordena las películas por puntuación (de mayor a menor)
-        # y toma solo las 5 primeras.
-        return Pelicula.objects.order_by('-puntuacion')[:5]
+        # Obtenemos las 6 películas con mejor puntuación
+        # (Usamos 6 para tener 2 slides completos)
+        return Pelicula.objects.order_by('-puntuacion')[:6]
+
+    def get_context_data(self, **kwargs):
+        # Obtenemos el contexto base
+        context = super().get_context_data(**kwargs)
+
+        # Obtenemos la lista plana de películas
+        lista_plana = context['peliculas_lista_plana']
+
+        # --- Esta es la lógica para agrupar en trozos de 3 ---
+        chunk_size = 3
+        lista_agrupada = [
+            lista_plana[i : i + chunk_size]
+            for i in range(0, len(lista_plana), chunk_size)
+        ]
+
+        # Añadimos la nueva lista agrupada al contexto
+        context['peliculas_agrupadas'] = lista_agrupada
+
+        return context
 
 
 class PeliculaListView(ListView):
