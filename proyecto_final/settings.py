@@ -41,19 +41,18 @@ ALLOWED_HOSTS.append('.onrender.com')
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    'whitenoise.runserver_nostatic',  # <-- PRIMERO (después de las de django si quieres)
+    'cloudinary_storage',             # <-- SEGUNDO
+    'cloudinary',                     # <-- TERCERO
+    
+    'django.contrib.admin',           # <-- DESPUÉS
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    
-    'whitenoise.runserver_nostatic',  # <-- Arriba de staticfiles
-    'django.contrib.staticfiles',       # <-- El importante
+    'django.contrib.staticfiles',       # <-- DESPUÉS
     
     'catalogo',                       # Tu app
-    
-    'cloudinary_storage',             # <-- Mover al final
-    'cloudinary',                     # <-- Mover al final
 ]
 
 MIDDLEWARE = [
@@ -141,7 +140,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'cloudinary_storage.storage.CloudinaryWhiteNoiseStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
