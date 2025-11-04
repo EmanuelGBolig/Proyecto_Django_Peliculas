@@ -3,12 +3,14 @@ from pathlib import Path
 import dj_database_url
 from dotenv import load_dotenv  # Para leer el .env
 
-# Carga el archivo .env (solo para desarrollo local)
-load_dotenv(BASE_DIR / '.env')
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Carga el archivo .env (solo para desarrollo local)
+load_dotenv(BASE_DIR / '.env')
 
 # --- Seguridad ---
 # Lee la SECRET_KEY desde el entorno (Render o .env)
