@@ -34,6 +34,8 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+# Como plan de respaldo, permite CUALQUIER subdominio de onrender.com
+ALLOWED_HOSTS.append('.onrender.com')
 
 
 # Application definition
@@ -91,8 +93,7 @@ DATABASES = {}
 if 'DATABASE_URL' in os.environ:
     # Estamos en producción (Render)
     DATABASES['default'] = dj_database_url.config(
-        default=os.environ.get('DATABASE_URL'),
-        conn_max_age=600
+        default=os.environ.get('DATABASE_URL'), conn_max_age=600
     )
 else:
     # Estamos en local (PC)
