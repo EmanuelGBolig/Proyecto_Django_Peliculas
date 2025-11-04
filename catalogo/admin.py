@@ -1,13 +1,13 @@
 from django.contrib import admin
 from django.db import models
 from .models import Pelicula  # <-- Cambia 'Pelicula' por el nombre de tu modelo si es diferente
-from cloudinary.forms import CloudinaryFileField
+from cloudinary.forms import CloudinaryFileInput
 
 # Define un Modelo de Admin personalizado
 class PeliculaAdmin(admin.ModelAdmin):
     # Esto es lo que fuerza el widget de Cloudinary para el campo 'imagen'
     formfield_overrides = {
-        models.ImageField: {'widget': CloudinaryFileField}
+        models.ImageField: {'widget': CloudinaryFileInput}
     }
     
     # (Opcional: esto mejora la vista de lista en el admin)
