@@ -133,40 +133,21 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
-STATIC_URL = 'static/'
+# --- Configuración de Archivos Estáticos (CSS/JS) ---
+STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = (
-    'cloudinary_storage.storage.CloudinaryWhiteNoiseStaticFilesStorage'
-)
+STATICFILES_STORAGE = 'cloudinary_storage.storage.CloudinaryWhiteNoiseStaticFilesStorage' # <-- SIN PARÉNTESIS
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
+# --- Configuración de Archivos Multimedia (Imágenes subidas) ---
+MEDIA_URL = '/media/' 
+# (No necesitamos MEDIA_ROOT porque Cloudinary lo maneja)
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-
-
-# --- Configuración de Cloudinary (Media Files) ---
-# Configuración de Cloudinary (donde están tus claves API)
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUD_NAME'),
     'API_KEY': os.environ.get('API_KEY'),
     'API_SECRET': os.environ.get('API_SECRET'),
 }
-
-# 1. ESTA LÍNEA ES PARA TUS IMÁGENES (MEDIA)
-# Es la que probablemente te falta o está mal
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
-# 2. ESTA LÍNEA ES PARA TUS CSS/JS (STATIC)
-# (Esta es la que arreglamos antes y está bien)
-STATICFILES_STORAGE = (
-    'cloudinary_storage.storage.CloudinaryWhiteNoiseStaticFilesStorage'
-)
 
 # 3. ESTA LÍNEA TAMBIÉN ES NECESARIA
 MEDIA_URL = '/media/'
