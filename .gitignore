@@ -2,6 +2,7 @@
 venv/
 *.env
 .env
+
 # Base de datos
 *.sqlite3
 db.sqlite3
@@ -15,3 +16,6 @@ media/
 
 # Archivos de VS Code
 .vscode/
+
+# Archivos estáticos recopilados por collectstatic
+staticfiles/
