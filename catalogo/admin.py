@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django.db import models
 from .models import Pelicula
-# 👇 ESTA ES LA LÍNEA CORRECTA 👇
-from cloudinary_storage.widgets import CloudinaryFileInput 
+# 👇 ESTA ES LA LÍNEA CORRECTA PARA LA VERSIÓN 0.3.0 👇
+from cloudinary_storage.forms import CloudinaryFileInput 
 
 # Define un Modelo de Admin personalizado
 class PeliculaAdmin(admin.ModelAdmin):
