@@ -2,11 +2,15 @@ import os
 from pathlib import Path
 import dj_database_url
 from dotenv import load_dotenv
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
+# --- Rutas base ---
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Si tienes un .env en local, lo carga
-load_dotenv(BASE_DIR / '.env')
+# --- Cargar variables de entorno (.env) ---
+load_dotenv(str(BASE_DIR / '.env'))
 
 # --- Seguridad ---
 SECRET_KEY = os.getenv("SECRET_KEY", "clave-secreta-local-insegura")
@@ -27,11 +31,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
-    'catalogo',  # Tu app principal
-    'cloudinary_storage',  # Cloudinary storage app
-    'cloudinary',  # Cloudinary core app
+
+    # App principal
+    'catalogo',
+
+    # Cloudinary
+    'cloudinary_storage',
+    'cloudinary',
 ]
 
+# --- Middleware ---
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -45,6 +54,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'proyecto_final.urls'
 
+# --- Templates ---
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -71,35 +81,43 @@ DATABASES = {
     )
 }
 
+# --- Validación de contraseñas ---
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
     {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+# --- Config regional ---
 LANGUAGE_CODE = 'es-es'
 TIME_ZONE = 'America/Argentina/Buenos_Aires'
 USE_I18N = True
 USE_TZ = True
 
-# --- Archivos Estáticos ---
+# --- Archivos estáticos ---
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # --- Cloudinary ---
+cloudinary.config(
+    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
+    api_key=os.getenv('CLOUDINARY_API_KEY'),
+    api_secret=os.getenv('CLOUDINARY_API_SECRET'),
+)
+
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
     'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
     'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
 }
 
+# Este storage hace que cualquier ImageField use Cloudinary automáticamente
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # --- Media ---
-MEDIA_URL = '/media/'  # Siempre está bien ponerlo, aunque uses Cloudinary
+MEDIA_URL = '/media/'
 
+# --- Auto ID ---
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
