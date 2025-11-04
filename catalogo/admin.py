@@ -1,5 +1,20 @@
 from django.contrib import admin
-from .models import Pelicula  # 1. Importa tu modelo 'Libro'
+from django.db import models
+from .models import Pelicula  # <-- Cambia 'Pelicula' por el nombre de tu modelo si es diferente
+from cloudinary.forms import CloudinaryFileField
 
-# 2. Registra el modelo en el sitio de administración
-admin.site.register(Pelicula)
+# Define un Modelo de Admin personalizado
+class PeliculaAdmin(admin.ModelAdmin):
+    # Esto es lo que fuerza el widget de Cloudinary para el campo 'imagen'
+    formfield_overrides = {
+        models.ImageField: {'widget': CloudinaryFileField}
+    }
+    
+    # (Opcional: esto mejora la vista de lista en el admin)
+    list_display = ('titulo', 'autor', 'puntuacion')
+    search_fields = ('titulo', 'autor')
+
+# Registra tu modelo USANDO la clase de admin personalizada
+admin.site.register(Pelicula, PeliculaAdmin) 
+
+# Si tenías una línea simple como 'admin.site.register(Pelicula)', bórrala.
