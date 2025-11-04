@@ -151,7 +151,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 
 # --- Configuración de Cloudinary (Media Files) ---
-# --- Configuración de Cloudinary (Media Files) ---
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUD_NAME'),
     'API_KEY': os.environ.get('API_KEY'),
