@@ -25,22 +25,30 @@
           Autor: {{ pelicula.autor }}
         </h4>
         <hr />
+
         {%if pelicula.duracion%}
         <p class="card-text fs-10">Duración: {{ pelicula.duracion }}</p>
-        {%endif%} {%if pelicula.fecha_lanzamiento%}
-        <p class="card-text fs-10">
-          Fecha de lanzamiento: {{ pelicula.fecha_lanzamiento }}
-        </p>
-        {%endif%} {% if pelicula.precuela %}
+        {%endif%}
+
+        {%if pelicula.fecha_lanzamiento%}
+        <p class="card-text fs-10">Fecha de lanzamiento: {{ pelicula.fecha_lanzamiento }}</p>        
+        {%endif%} 
+        
+        {% if pelicula.precuela %}
         <p class="card-text fs-10">Precuela: {{ pelicula.precuela }}</p>
-        {% endif %} {% if pelicula.secuela %}
+        {% endif %}
+
+        {% if pelicula.secuela %}
         <p class="card-text fs-10">Secuela: {{ pelicula.secuela }}</p>
         {% endif %}
+
         <hr />
+
         {% if pelicula.sinopsis %}
         <h5>Sinopsis</h5>
         <p style="white-space: pre-wrap">{{ pelicula.sinopsis }}</p>
         {% endif %}
+
         <div class="mb-3 fs-5" style="color: #f39c12;">
             
             {% if pelicula.puntuacion >= 1 %}<i class="bi bi-star-fill"></i>{% else %}<i class="bi bi-star"></i>{% endif %}
