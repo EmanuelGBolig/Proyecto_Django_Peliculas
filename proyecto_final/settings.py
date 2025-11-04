@@ -138,9 +138,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'cloudinary_storage.storage.CloudinaryWhiteNoiseStaticFilesStorage' # <-- SIN PARÉNTESIS
 
-# --- Configuración de Archivos Multimedia (Imágenes subidas) ---
-MEDIA_URL = '/media/' 
-# (No necesitamos MEDIA_ROOT porque Cloudinary lo maneja)
+
 
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUD_NAME'),
