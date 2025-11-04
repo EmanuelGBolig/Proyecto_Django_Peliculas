@@ -1,25 +1,39 @@
 import os
 from pathlib import Path
 import dj_database_url
-from dotenv import load_dotenv
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
+from dotenv import load_dotenv  # Para leer el .env
 
-# Cargar variables de entorno desde .env (solo en local)
-load_dotenv()
+# Carga el archivo .env (solo para desarrollo local)
+load_dotenv(BASE_DIR / '.env')
 
-# --- Rutas base ---
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
 # --- Seguridad ---
-SECRET_KEY = os.getenv("SECRET_KEY", "clave-secreta-local")
+# Lee la SECRET_KEY desde el entorno (Render o .env)
+SECRET_KEY = os.getenv("SECRET_KEY", "clave-secreta-local-insegura")
+
+# DEBUG estará en 'True' solo si la variable DEBUG es 'True'
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "proyecto-peliculas-el7d.onrender.com"]
+# Hosts permitidos
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
-# --- Aplicaciones instaladas ---
+# Añade el host de Render automáticamente si existe
+RENDER_EXTERNAL_HOSTNAME = os.getenv("RENDER_EXTERNAL_HOSTNAME")
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+    ALLOWED_HOSTS.append('.onrender.com') # Añade el wildcard por si acaso
+
+
+# --- Aplicaciones ---
+# El orden es importante para Cloudinary y el Admin
 INSTALLED_APPS = [
+    'whitenoise.runserver_nostatic',  # Para que Whitenoise sirva CSS en local
+    'cloudinary_storage',             # Debe ir ANTES del admin
+    'cloudinary',                     # Debe ir ANTES del admin
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -27,18 +41,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Apps del proyecto
-    'catalogo',  # reemplazá por el nombre de tu app principal
-
-    # Cloudinary
-    'cloudinary',
-    'cloudinary_storage',
+    # Tu app
+    'catalogo',
 ]
 
-# --- Middlewares ---
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Sirve archivos estáticos en Render
+    'whitenoise.middleware.WhiteNoiseMiddleware', # Middleware de Whitenoise
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -47,14 +56,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# --- URLs ---
-ROOT_URLCONF = 'proyecto_final.urls'  # cambialo si tu proyecto tiene otro nombre base
+ROOT_URLCONF = 'proyecto_final.urls'
 
-# --- Templates ---
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # opcional, si usás carpeta de templates global
+        'DIRS': [BASE_DIR / 'templates'], # Carpeta global de templates
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -67,42 +74,56 @@ TEMPLATES = [
     },
 ]
 
-# --- WSGI ---
-WSGI_APPLICATION = 'proyecto_final.wsgi.application'  # ajustá el nombre si cambia
+WSGI_APPLICATION = 'proyecto_final.wsgi.application'
 
-# --- Base de datos ---
+
+# --- Base de Datos ---
+# Usa PostgreSQL en Render (leyendo DATABASE_URL)
+# Usa db.sqlite3 en local
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.getenv("DATABASE_URL", f"sqlite:///{BASE_DIR / 'db.sqlite3'}"),
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
         conn_max_age=600,
     )
 }
 
-# --- Archivos estáticos (CSS/JS) ---
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# --- Archivos multimedia (imágenes subidas por el usuario) ---
-MEDIA_URL = '/media/'
+# --- Validación de Contraseñas ---
+AUTH_PASSWORD_VALIDATORS = [
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+]
 
-# --- Cloudinary ---
-cloudinary.config(
-    cloud_name=os.getenv("CLOUD_NAME"),
-    api_key=os.getenv("API_KEY"),
-    api_secret=os.getenv("API_SECRET"),
-)
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
-# --- Idioma y zona horaria ---
-LANGUAGE_CODE = 'es-es'
-TIME_ZONE = 'America/Argentina/Buenos_Aires'
+# --- Internacionalización ---
+LANGUAGE_CODE = 'es-es' # Español
+TIME_ZONE = 'America/Argentina/Buenos_Aires' # Tu zona horaria
 USE_I18N = True
 USE_TZ = True
 
-# --- Archivos estáticos para producción ---
-STATICFILES_DIRS = []  # vacío porque solo usamos staticfiles/
 
-# --- Configuración por defecto de Django ---
+# --- Configuración de Archivos Estáticos (CSS/JS) ---
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles' # Carpeta para 'collectstatic' en Render
+STATICFILES_STORAGE = 'cloudinary_storage.storage.CloudinaryWhiteNoiseStaticFilesStorage'
+
+
+# --- Configuración de Archivos Multimedia (Imágenes subidas) ---
+MEDIA_URL = '/media/' 
+# (No necesitamos MEDIA_ROOT, Cloudinary lo maneja)
+
+# Esta es la configuración MODERNA que lee las variables de entorno
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv('CLOUD_NAME'),
+    'API_KEY': os.getenv('API_KEY'),
+    'API_SECRET': os.getenv('API_SECRET'),
+}
+
+# Esta línea le dice a Django que use Cloudinary para TODAS las subidas
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+
+# --- Configuración por defecto ---
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
