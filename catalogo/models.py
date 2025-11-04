@@ -10,14 +10,10 @@ class Pelicula(models.Model):
     precuela = models.TextField(blank=True, null=True)
     secuela = models.TextField(blank=True, null=True)
     sinopsis = models.TextField(blank=True, null=True)
-    imagen = models.ImageField(upload_to='libros/', blank=True, null=True)
+    imagen = models.ImageField(upload_to='peliculas/', blank=True, null=True)
 
     puntuacion = models.IntegerField(
-        default= 0,
-        validators=[
-            MinValueValidator(0),
-            MaxValueValidator(5)
-        ]
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(5)]
     )
 
     def __str__(self):

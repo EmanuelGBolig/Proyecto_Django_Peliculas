@@ -42,17 +42,15 @@ ALLOWED_HOSTS.append('.onrender.com')
 
 INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',  # <-- PRIMERO (después de las de django si quieres)
-    'cloudinary_storage',             # <-- SEGUNDO
-    'cloudinary',                     # <-- TERCERO
-    
-    'django.contrib.admin',           # <-- DESPUÉS
+    'cloudinary_storage',  # <-- SEGUNDO
+    'cloudinary',  # <-- TERCERO
+    'django.contrib.admin',  # <-- DESPUÉS
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',       # <-- DESPUÉS
-    
-    'catalogo',                       # Tu app
+    'django.contrib.staticfiles',  # <-- DESPUÉS
+    'catalogo',  # Tu app
 ]
 
 MIDDLEWARE = [
@@ -140,22 +138,35 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'cloudinary_storage.storage.CloudinaryWhiteNoiseStaticFilesStorage'
+STATICFILES_STORAGE = (
+    'cloudinary_storage.storage.CloudinaryWhiteNoiseStaticFilesStorage'
+)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+
 
 
 # --- Configuración de Cloudinary (Media Files) ---
+# Configuración de Cloudinary (donde están tus claves API)
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUD_NAME'),
     'API_KEY': os.environ.get('API_KEY'),
     'API_SECRET': os.environ.get('API_SECRET'),
 }
 
+# 1. ESTA LÍNEA ES PARA TUS IMÁGENES (MEDIA)
+# Es la que probablemente te falta o está mal
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# 2. ESTA LÍNEA ES PARA TUS CSS/JS (STATIC)
+# (Esta es la que arreglamos antes y está bien)
+STATICFILES_STORAGE = (
+    'cloudinary_storage.storage.CloudinaryWhiteNoiseStaticFilesStorage'
+)
+
+# 3. ESTA LÍNEA TAMBIÉN ES NECESARIA
+MEDIA_URL = '/media/'
