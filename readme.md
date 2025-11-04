@@ -1,6 +1,6 @@
 # Proyecto Final - Catálogo de Películas
 
-Proyecto final para el curso "Introducción a la Programación Web con Django".
+Proyecto final para la materia "Desarrollo de sistemas Web Tercero".
 
 Este proyecto es un catálogo web de películas que permite listar todas las películas de la base de datos y ver una página de detalle para cada una, mostrando su imagen, sinopsis y puntuación.
 
