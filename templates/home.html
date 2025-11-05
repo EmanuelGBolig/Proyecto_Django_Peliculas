@@ -26,7 +26,7 @@
               <div class="row">
                 
                 {% for pelicula in grupo %}
-                  <div class="col-md-4"> <a href="{% url 'pelicula_detail' pelicula.pk %}" class="text-decoration-none text-dark">
+                  <div class="col-12 col-md-4 {% if not forloop.first %}d-none d-md-block{% endif %}">
                       <div class="card h-100">
                         {% if pelicula.imagen %}
                           <img 
