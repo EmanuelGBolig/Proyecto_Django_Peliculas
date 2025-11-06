@@ -88,7 +88,7 @@ Crea un archivo llamado .env en la raíz del proyecto. Copia y pega el siguiente
 Ini, TOML
 
 Archivo .env para desarrollo local
-SECRET_KEY='django-insecure-local-key-para-probar-@#123'
+SECRET_KEY='django-insecure-local-key-@#E$!sfa(ASDF*@#fa'
 
 DEBUG='True'
 
