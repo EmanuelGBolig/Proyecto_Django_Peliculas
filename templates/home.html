@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1 class="display-5 fw-bold mb-4 titulo-distintivo mx-auto">Destacadas</h1>
+  <h1 class="display-5 fw-bold mb-4 titulo-distintivo mx-auto ">Destacadas</h1>
 
   <div id="carruselDestacadas" class="carousel slide" data-bs-ride="carousel">
     
@@ -19,7 +19,7 @@
     <div class="carousel-inner">
       
       {% for grupo in peliculas_agrupadas %}
-        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+        <div class="carousel-item {% if forloop.first %}active{% endif %} py-3">
           
           <div class="row justify-content-center">
             <div class="col-md-10 col-lg-8"> <div class="row">
