@@ -96,4 +96,5 @@ python manage.py createsuperuser
 
 7. Ejecutar el Servidor
 python manage.py runserver
+
 El sitio estará disponible en http://127.0.0.1:8000/
