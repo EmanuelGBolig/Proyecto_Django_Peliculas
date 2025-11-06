@@ -1,51 +1,37 @@
-{% extends 'base.html' %} {% block content %}
-<style>
-  .card {
-    /* Prepara la tarjeta para una transición suave */
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-  }
+{% extends 'base.html' %}
 
-  .card:hover {
-    /* La levanta y agranda ligeramente */
-    transform: scale(1.03);
+{% block content %}
+  <h1 class="mb-4 titulo-distintivo">Catálogo de Películas</h1>
+  
+  <div class="row">
+    {% for pelicula in peliculas %}
+      <div class="col-md-4 mb-4">
+        
+        <a href="{% url 'pelicula_detail' pelicula.pk %}" class="text-decoration-none text-dark">
+          <div class="card h-100">
+            {% if pelicula.imagen %}
+              <img
+                src="{{ pelicula.imagen.url }}"
+                class="card-img-top"
+                alt="{{ pelicula.titulo }}"
+                style="height: 400px; object-fit: cover;"
+              />
+            {% else %}
+              <img
+                src="https://via.placeholder.com/400x600.png?text=Sin+Portada"
+                class="card-img-top"
+                alt="Sin portada"
+                style="height: 400px; object-fit: cover;"
+              />
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ pelicula.titulo }}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">{{ pelicula.autor }}</h6>
+            </div>
+          </div>
+        </a>
 
-    /* Añade una sombra más pronunciada para dar profundidad */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  }
-</style>
-
-<h1 class="mb-4">Catálogo de peliculas</h1>
-
-<div class="row">
-  {% for pelicula in peliculas %}
-  <div class="col-md-4 mb-4">
-    <a
-      href="{% url 'pelicula_detail' pelicula.pk %}"
-      class="text-decoration-none text-dark"
-    >
-      <div class="card h-100">
-        {% if pelicula.imagen %}
-        <img
-          src="{{ pelicula.imagen.url }}"
-          class="card-img-top"
-          alt="{{ pelicula.titulo }}"
-          style="height: 500px; object-fit: cover"
-        />
-        {% else %}
-        <img
-          src="https://via.placeholder.com/400x600.png?text=Sin+Portada"
-          class="card-img-top"
-          alt="Sin portada"
-        />
-        {% endif %}
-
-        <div class="card-body">
-          <h5 class="card-title">{{ pelicula.titulo }}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">{{ pelicula.autor }}</h6>
-        </div>
       </div>
-    </a>
+    {% endfor %}
   </div>
-  {% endfor %}
-</div>
 {% endblock %}

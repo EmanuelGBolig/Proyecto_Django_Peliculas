@@ -22,31 +22,50 @@
     <style>
       /* 1. Hacemos espacio abajo para los indicadores */
       #carruselDestacadas {
-        margin-bottom: 60px; /* Espacio para que quepan los indicadores */
+        margin-bottom: 60px; 
       }
       
       /* 2. Reposicionamos los indicadores (la barra inferior) */
       #carruselDestacadas .carousel-indicators {
-        bottom: -50px; /* Los empuja 50px hacia abajo, fuera del carrusel */
+        bottom: -50px; 
       }
       
-      /* 3. Damos color a los indicadores (para que se vean en tema claro/oscuro) */
+      /* 3. Damos color a los indicadores (para que se vean) */
       #carruselDestacadas .carousel-indicators [data-bs-target] {
-         /* Un color neutral que se ve en ambos temas */
         background-color: #888; 
       }
       
-      /* 4. Damos color a las flechas (a veces el tema oscuro las esconde) */
+      /* 4. Damos color a las flechas (por si el tema las esconde) */
       #carruselDestacadas .carousel-control-prev-icon,
       #carruselDestacadas .carousel-control-next-icon {
-         /* Filtro para hacer el ícono SVG más visible */
          filter: brightness(0.8) invert(0.3);
       }
 
-      /* 5. (¡LA CLAVE!) Levanta las tarjetas para que sean clickeables */
+      /* 5. Levanta las tarjetas del carrusel para que sean clickeables */
       .carousel-card-link {
         position: relative; /* Necesario para que z-index funcione */
         z-index: 2;         /* Pone el enlace por encima de las flechas (z-index: 1) */
+      }
+      
+      /* 6. Estilo de subrayado para los títulos */
+      .titulo-distintivo {
+        border-bottom: 5px solid; 
+        border-image-slice: 1;
+        border-image-source: linear-gradient(to right, var(--bs-primary), var(--bs-info));
+        padding-bottom: 8px; 
+        width: fit-content; 
+      }
+      .navbar-brand.titulo-distintivo {
+        border-image-source: linear-gradient(to right, var(--bs-info), var(--bs-light));
+      }
+
+      /* 7. Animación de "hover" para TODAS las tarjetas */
+      .card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+      }
+      .card:hover {
+        transform: scale(1.03); /* Agranda la tarjeta un 3% */
+        box-shadow: 0 4px 20px rgba(var(--bs-body-color-rgb), 0.1);
       }
     </style>
     </head>
@@ -54,7 +73,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
-    <a class="navbar-brand" href="{% url 'home' %}">Peliculas</a>
+    <a class="navbar-brand titulo-distintivo" href="{% url 'home' %}">Peliculas</a>
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContenido" aria-controls="navbarContenido" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -75,7 +94,6 @@
         </li>
       </ul>
     </div>
-
   </div>
 </nav>
 
@@ -102,8 +120,7 @@
             icon.classList.add('bi-sun-fill');
           }
         }
-
-        updateIcon();
+        updateIcon(); // Pone el ícono correcto al cargar
 
         toggler.addEventListener('click', function(e) {
           e.preventDefault(); 

@@ -1,4 +1,6 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %} 
+
+{% block content %}
 <div class="row">
   <div class="col-md-4">
     {% if pelicula.imagen %}
@@ -6,7 +8,6 @@
       src="{{ pelicula.imagen.url }}"
       class="img-fluid rounded"
       alt="{{ pelicula.titulo }}"
-      style="height: 700px; object-fit: cover"
     />
     {% else %}
     <img
@@ -26,43 +27,37 @@
         </h4>
         <hr />
 
-        {%if pelicula.duracion%}
-        <p class="card-text fs-10">Duración: {{ pelicula.duracion }}</p>
-        {%endif%}
+        {% if pelicula.duracion %}
+        <p><strong>Duración:</strong> {{ pelicula.duracion }}</p>
+        {% endif %}
 
-        {%if pelicula.fecha_lanzamiento%}
-        <p class="card-text fs-10">Fecha de lanzamiento: {{ pelicula.fecha_lanzamiento }}</p>        
-        {%endif%} 
+        {% if pelicula.fecha_lanzamiento %}
+        <p><strong>Fecha de lanzamiento:</strong> {{ pelicula.fecha_lanzamiento }}</p> 
+        {% endif %} 
         
         {% if pelicula.precuela %}
-        <p class="card-text fs-10">Precuela: {{ pelicula.precuela }}</p>
+        <p><strong>Precuela:</strong> {{ pelicula.precuela }}</p>
         {% endif %}
 
         {% if pelicula.secuela %}
-        <p class="card-text fs-10">Secuela: {{ pelicula.secuela }}</p>
+        <p><strong>Secuela:</strong> {{ pelicula.secuela }}</p>
         {% endif %}
 
         <hr />
 
+        <div class="mb-3 fs-5" style="color: #f39c12;">
+          {% if pelicula.puntuacion >= 1 %}<i class="bi bi-star-fill"></i>{% else %}<i class="bi bi-star"></i>{% endif %}
+          {% if pelicula.puntuacion >= 2 %}<i class="bi bi-star-fill"></i>{% else %}<i class="bi bi-star"></i>{% endif %}
+          {% if pelicula.puntuacion >= 3 %}<i class="bi bi-star-fill"></i>{% else %}<i class="bi bi-star"></i>{% endif %}
+          {% if pelicula.puntuacion >= 4 %}<i class="bi bi-star-fill"></i>{% else %}<i class="bi bi-star"></i>{% endif %}
+          {% if pelicula.puntuacion >= 5 %}<i class="bi bi-star-fill"></i>{% else %}<i class="bi bi-star"></i>{% endif %}
+          <span class="text-muted fs-6 ms-2">({{ pelicula.puntuacion }}/5)</span>
+        </div>
+        
         {% if pelicula.sinopsis %}
         <h5>Sinopsis</h5>
         <p style="white-space: pre-wrap">{{ pelicula.sinopsis }}</p>
         {% endif %}
-
-        <div class="mb-3 fs-5" style="color: #f39c12;">
-            
-            {% if pelicula.puntuacion >= 1 %}<i class="bi bi-star-fill"></i>{% else %}<i class="bi bi-star"></i>{% endif %}
-            
-            {% if pelicula.puntuacion >= 2 %}<i class="bi bi-star-fill"></i>{% else %}<i class="bi bi-star"></i>{% endif %}
-            
-            {% if pelicula.puntuacion >= 3 %}<i class="bi bi-star-fill"></i>{% else %}<i class="bi bi-star"></i>{% endif %}
-            
-            {% if pelicula.puntuacion >= 4 %}<i class="bi bi-star-fill"></i>{% else %}<i class="bi bi-star"></i>{% endif %}
-            
-            {% if pelicula.puntuacion >= 5 %}<i class="bi bi-star-fill"></i>{% else %}<i class="bi bi-star"></i>{% endif %}
-            
-            <span class="text-muted fs-6 ms-2">({{ pelicula.puntuacion }}/5)</span>
-          </div>        
 
         <a href="{% url 'catalogo' %}" class="btn btn-primary mt-3"
           >Volver al Catálogo</a
