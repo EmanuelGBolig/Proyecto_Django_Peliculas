@@ -56,11 +56,11 @@ cd Proyecto_Django_Peliculas
 
 3. Crear y Activar un Entorno Virtual
 
-# Para Windows
+Para Windows
 python -m venv venv
 .\venv\Scripts\activate
 
-# Para macOS/Linux
+Para macOS/Linux
 python3 -m venv venv
 source venv/bin/activate
 
@@ -75,14 +75,14 @@ Crea un archivo llamado .env en la raíz del proyecto.
 
 Copia y pega el siguiente contenido, añadiendo tu API Secret de Cloudinary:
 
-# Archivo .env para desarrollo local
+Archivo .env para desarrollo local
 SECRET_KEY='django-insecure-local-key-para-probar-@#123'
 DEBUG='True'
 
-# Dejamos DATABASE_URL vacío para que use SQLite por defecto
+Dejamos DATABASE_URL vacío para que use SQLite por defecto
 DATABASE_URL=
 
-# Tus claves de Cloudinary (para que funcionen las imágenes en local)
+Tus claves de Cloudinary (para que funcionen las imágenes en local)
 CLOUD_NAME='dpynpe2sw'
 API_KEY='332323673199339'
 API_SECRET='4y-1p91hrC1TuSi5FvaODKrd1dM'
