@@ -32,7 +32,7 @@
                       <div class="card h-100">
                         {% if pelicula.imagen %}
                           <img 
-                            src="{{ pelicula.imagen }}" 
+                            src="{{ pelicula.imagen.url }}" 
                             class="card-img-top" 
                             alt="{{ pelicula.titulo }}"
                             style="height: 300px; object-fit: cover;"
