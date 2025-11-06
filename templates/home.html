@@ -2,41 +2,38 @@
 
 {% block content %}
 
-  <h1 class="display-5 fw-bold text-center mb-4">Películas Destacadas</h1>
+  <h1 class="display-5 fw-bold text-center mb-4">Destacadas</h1>
 
-  <div id="carruselDestacadas" class="carousel slide" data-bs-ride="carousel">
-    
-    <div class="carousel-indicators">
-      {% for grupo in peliculas_agrupadas %}
-        <button
-          type="button"
-          data-bs-target="#carruselDestacadas"
-          data-bs-slide-to="{{ forloop.counter0 }}"
-          class="{% if forloop.first %}active{% endif %}"
-        ></button>
-      {% endfor %}
-    </div>
+  <div class="row">
+    <div class="col-md-10 col-lg-8 mx-auto"> <div id="carruselDestacadas" class="carousel slide" data-bs-ride="carousel">
+        
+        <div class="carousel-indicators">
+          {% for grupo in peliculas_agrupadas %}
+            <button
+              type="button"
+              data-bs-target="#carruselDestacadas"
+              data-bs-slide-to="{{ forloop.counter0 }}"
+              class="{% if forloop.first %}active{% endif %}"
+            ></button>
+          {% endfor %}
+        </div>
 
-    <div class="carousel-inner">
-      
-      {% for grupo in peliculas_agrupadas %}
-        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+        <div class="carousel-inner">
           
-          <div class="row justify-content-center">
-            <div class="col-md-10 col-lg-8"> <div class="row">
+          {% for grupo in peliculas_agrupadas %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+              
+              <div class="row">
                 
                 {% for pelicula in grupo %}
                   <div class="col-12 col-md-4 {% if not forloop.first %}d-none d-md-block{% endif %}">
-                    
-                    <a href="{% url 'pelicula_detail' pelicula.pk %}" class="text-decoration-none text-dark carousel-card-link">
                       <div class="card h-100">
                         {% if pelicula.imagen %}
                           <img 
-                            src="{{ pelicula.imagen }}" 
+                            src="{{ pelicula.imagen.url }}" 
                             class="card-img-top" 
                             alt="{{ pelicula.titulo }}"
-                            style="height: 300px; object-fit: cover;"
-                          >
+                            style="height: 300px; object-fit: cover;" >
                         {% else %}
                           <img 
                             src="https://via.placeholder.com/400x600.png?text=Sin+Portada" 
@@ -61,5 +58,4 @@
       <span class="visually-hidden">Next</span>
     </button>
   </div>
-
-{% endblock %}
+  {% endblock %}
