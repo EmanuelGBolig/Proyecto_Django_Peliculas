@@ -20,7 +20,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
     <style>
-      /* --- Estilos del Carrusel --- */
       #carruselDestacadas { margin-bottom: 60px; }
       #carruselDestacadas .carousel-indicators { bottom: -50px; }
       #carruselDestacadas .carousel-indicators [data-bs-target] { background-color: #888; }
@@ -28,12 +27,7 @@
       #carruselDestacadas .carousel-control-next-icon {
          filter: brightness(0.8) invert(0.3);
       }
-      .carousel-card-link {
-        position: relative; 
-        z-index: 2;         
-      }
-      
-      /* --- Animación de Tarjetas --- */
+      .carousel-card-link { position: relative; z-index: 2; }
       .card:not(.card-no-hover) {
         transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
       }
@@ -41,40 +35,30 @@
         transform: scale(1.03);
         box-shadow: 0 4px 20px rgba(var(--bs-body-color-rgb), 0.1);
       }
-      
-      /* =================================== */
-      /* 👇 ESTILO NUEVO PARA EL BOTÓN 👇   */
-      /* =================================== */
       .btn-dynamic-bg {
-        /* Usa el color de fondo de la página */
         background-color: var(--bs-body-bg); 
-        
-        /* Usa el color de borde de la página */
         border-color: var(--bs-border-color); 
-        
-        /* Usa el color del texto de la página */
         color: var(--bs-body-color); 
       }
-      
-      /* Define un 'hover' para que se vea bien en ambos temas */
       .btn-dynamic-bg:hover {
         background-color: var(--bs-secondary-bg);
         border-color: var(--bs-border-color-translucent);
         color: var(--bs-body-color);
       }
-      
-      /* El ícono de la lupa debe usar el color del texto */
       .btn-dynamic-bg i {
          color: var(--bs-body-color);
       }
     </style>
-    </head>
+  </head>
   <body>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
     <a class="navbar-brand" href="{% url 'home' %}">Inicio</a>
     
+    <a class="nav-link d-lg-none text-white ms-auto me-2" href="#" data-bs-toggle="modal" data-bs-target="#searchModal">
+        <i class="bi bi-search fs-5"></i> </a>
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContenido" aria-controls="navbarContenido" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -87,7 +71,7 @@
         </li>
       </ul>
 
-      <form class="d-flex mx-auto" style="width: 55%;" role="search" action="{% url 'catalogo' %}" method="get">
+      <form class="d-none d-lg-flex mx-auto" style="width: 55%;" role="search" action="{% url 'catalogo' %}" method="get">
         <div class="input-group">
           <input 
             class="form-control" 
@@ -119,7 +103,34 @@
     {% endblock %}
 </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="searchModalLabel">Buscar Película</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form class="d-flex" role="search" action="{% url 'catalogo' %}" method="get">
+          <div class="input-group">
+            <input 
+              class="form-control" 
+              type="search" 
+              placeholder="Buscar..." 
+              aria-label="Buscar"
+              name="q"
+              value="{{ request.GET.q }}"
+            >
+            <button class="btn btn-dynamic-bg" type="submit" id="search-button-modal">
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
       document.addEventListener('DOMContentLoaded', function() {
