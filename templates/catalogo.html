@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1 class="mb-4 titulo-distintivo">Catálogo de Películas</h1>
+{% if request.GET.q %}
+  <h2 class="mb-4">Resultados para: <span class="text-primary">{{ request.GET.q }}</span></h2>
+{% else %}
+  <h1 class="mb-4">Catálogo de Películas</h1>
+{% endif %}
   
   <div class="row">
     {% for pelicula in peliculas %}

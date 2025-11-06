@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView, TemplateView, DetailView
 from .models import Pelicula
+from django.db.models import Q
 
 
 # Create your views here.
@@ -41,6 +42,18 @@ class PeliculaListView(ListView):
     model = Pelicula
     template_name = "catalogo.html"
     context_object_name = "peliculas"
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+
+        if query:
+            object_list = self.model.objects.filter(
+                Q(titulo__icontains=query) | Q(autor__icontains=query)
+            )
+        else:
+            object_list = self.model.objects.all()
+
+        return object_list
 
 
 class PeliculaDetailView(DetailView):
