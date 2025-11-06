@@ -12,7 +12,7 @@ class Pelicula(models.Model):
     secuela = models.TextField(blank=True, null=True)
     sinopsis = models.TextField(blank=True, null=True)
     
-    # 👇 campo nativo de Cloudinary
+   
     imagen = CloudinaryField('imagen', folder='peliculas', blank=True, null=True)
 
     puntuacion = models.IntegerField(
