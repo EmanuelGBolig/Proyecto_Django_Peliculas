@@ -64,18 +64,15 @@ cd Proyecto_Django_Peliculas
 3. Crear y Activar un Entorno Virtual
 
 Para Windows
-
-Bash
-
 python -m venv venv
+
 .\venv\Scripts\activate
 
 Para macOS/Linux
-
-Bash
-
 python3 -m venv venv
+
 source venv/bin/activate
+
 
 4. Instalar Dependencias
 Bash
@@ -83,34 +80,39 @@ Bash
 pip install -r requirements.txt
 
 5. Crear el Archivo de Entorno .env
+   
 Este proyecto usa un archivo .env para manejar las claves locales.
 
 Crea un archivo llamado .env en la raíz del proyecto. Copia y pega el siguiente contenido, asegurándote de añadir tu API Secret:
 
 Ini, TOML
 
-# Archivo .env para desarrollo local
+Archivo .env para desarrollo local
 SECRET_KEY='django-insecure-local-key-para-probar-@#123'
+
 DEBUG='True'
 
-# Dejamos DATABASE_URL vacío para que use SQLite por defecto
+Dejamos DATABASE_URL vacío para que use SQLite por defecto
 DATABASE_URL=
 
-# Tus claves de Cloudinary (para que funcionen las imágenes en local)
+Tus claves de Cloudinary (para que funcionen las imágenes en local)
 CLOUD_NAME='dpynpe2sw'
+
 API_KEY='332323673199339'
+
 API_SECRET='4y-1p91hrC1TuSi5FvaODKrd1dM'
 
+
 6. Aplicar Migraciones y Crear un Usuario
+   
 Esto creará tu base de datos local db.sqlite3.
 
 Bash
 
 python manage.py migrate
+
 python manage.py createsuperuser
 
 7. Ejecutar el Servidor
-Bash
-
 python manage.py runserver
-El sitio estará disponible en http://127.0.0.1:8000/.
+El sitio estará disponible en http://127.0.0.1:8000/
